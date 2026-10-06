@@ -3,13 +3,16 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
-from app.routers import auth, transactions
+from app.routers import auth, budget, data, stats, transactions
 
 
 def create_app() -> FastAPI:
     application = FastAPI(title="Money Tracker API", version="1.0.0")
     application.include_router(auth.router, prefix="/api")
     application.include_router(transactions.router, prefix="/api")
+    application.include_router(stats.router, prefix="/api")
+    application.include_router(budget.router, prefix="/api")
+    application.include_router(data.router, prefix="/api")
 
     frontend = get_settings().frontend_path
     application.mount("/css", StaticFiles(directory=frontend / "css"), name="css")

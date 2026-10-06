@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.models import User
-from app.schemas import AuthResponse, LoginRequest, RegisterRequest, UserRead
+from app.schemas import AuthResponse, DisplayNameUpdate, LoginRequest, RegisterRequest, UserRead
 from app.security import create_access_token, get_current_user, hash_password, verify_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -56,4 +56,16 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)) -> AuthResponse:
 
 @router.get("/me", response_model=UserRead)
 def me(user: User = Depends(get_current_user)) -> User:
+    return user
+
+
+@router.put("/me", response_model=UserRead)
+def update_me(
+    payload: DisplayNameUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> User:
+    user.display_name = payload.display_name
+    db.commit()
+    db.refresh(user)
     return user

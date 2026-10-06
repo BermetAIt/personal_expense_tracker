@@ -55,6 +55,18 @@ class LoginRequest(BaseModel):
     password: str = Field(min_length=1, max_length=72)
 
 
+class DisplayNameUpdate(BaseModel):
+    display_name: str = Field(min_length=1, max_length=30)
+
+    @field_validator("display_name")
+    @classmethod
+    def trim_display_name(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("Name is required")
+        return value
+
+
 class UserRead(BaseModel):
     id: int
     email: EmailStr
@@ -95,3 +107,39 @@ class TransactionRead(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SummaryRead(BaseModel):
+    month: str
+    balance: Decimal
+    income: Decimal
+    expenses: Decimal
+
+
+class CategoryStat(BaseModel):
+    category: str
+    total: Decimal
+    percentage: float
+
+
+class DayStat(BaseModel):
+    day: date
+    total: Decimal
+
+
+class BudgetUpdate(BaseModel):
+    monthly_limit: Decimal = Field(
+        ge=0, lt=Decimal("1000000000"), max_digits=12, decimal_places=2
+    )
+
+    @field_validator("monthly_limit")
+    @classmethod
+    def normalize_monthly_limit(cls, value: Decimal) -> Decimal:
+        return value.quantize(Decimal("0.01"))
+
+
+class BudgetRead(BaseModel):
+    monthly_limit: Decimal
+    spent: Decimal
+    remaining: Decimal
+    exceeded: bool

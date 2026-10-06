@@ -1,4 +1,3 @@
-from datetime import date
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
@@ -6,19 +5,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import get_db
+from app.date_utils import month_bounds
 from app.models import Transaction, User
 from app.schemas import TransactionCreate, TransactionRead
 from app.security import get_current_user
 
 router = APIRouter(prefix="/transactions", tags=["transactions"])
 Month = Annotated[str, Query(pattern=r"^\d{4}-(0[1-9]|1[0-2])$")]
-
-
-def month_bounds(month: str) -> tuple[date, date]:
-    year, month_number = map(int, month.split("-"))
-    start = date(year, month_number, 1)
-    end = date(year + (month_number == 12), month_number % 12 + 1, 1)
-    return start, end
 
 
 def owned_transaction(db: Session, transaction_id: int, user_id: int) -> Transaction:
