@@ -1,0 +1,18 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////data/money_tracker.db}
+      FRONTEND_DIR: /app/frontend
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-60}
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      - money_tracker_data:/data
+    restart: unless-stopped
+
+volumes:
+  money_tracker_data:

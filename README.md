@@ -100,7 +100,7 @@ Open [http://localhost:8000](http://localhost:8000). Configure `DATABASE_URL` an
 docker compose up --build
 ```
 
-The app is available at [http://localhost:8000](http://localhost:8000); API documentation is at `/docs`.
+The app is available at [http://localhost:8000](http://localhost:8000); API documentation is at `/docs`. Compose persists SQLite data in a named volume. To configure JWT signing or use PostgreSQL, set `JWT_SECRET_KEY` and `DATABASE_URL` in an untracked root `.env` file. The app generates an ephemeral signing key when none is provided, which is suitable only for local development.
 
 ## Tests and Lint
 
