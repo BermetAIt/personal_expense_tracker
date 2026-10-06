@@ -1,0 +1,1 @@
+document.querySelector("#app").innerHTML = "<p>Money Tracker загружается…</p>";
