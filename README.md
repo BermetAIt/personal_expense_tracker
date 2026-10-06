@@ -1,9 +1,20 @@
 # Money Tracker
 
-**Author:** Arstanalieva Bermet  
-**Date:** October 6, 2026
+**Author:** Arstanalieva Bermet
 
-An account-based personal finance tracker for recording income and expenses, reviewing monthly spending, and setting a budget. The interface is in Russian and uses tenge (₸), following the supplied single-file prototype. This project is developed as a university Computer Science project.
+**Original proposal:** September 22, 2026
+
+**Current version:** October 6, 2026
+
+Money Tracker is a personal finance application for recording income and expenses, reviewing monthly spending, and setting a budget. It is developed as a university Computer Science project. The interface is in Russian and uses tenge (₸), following the supplied visual prototype.
+
+## Project Evolution
+
+The Version 1 proposal, written September 22, 2026, described a local, single-user expense tracker built with Python, Streamlit, and SQLite. Its core goals were to add an expense, view and delete entries, and chart spending by category.
+
+The implemented version keeps the original goals and local SQLite option, and expands the project into a full-stack application. The UI is built with vanilla HTML, CSS, and JavaScript modules and served by FastAPI. It now supports income as well as expenses, user accounts, per-user data isolation, editing, monthly summaries, search, budgets, richer statistics, CSV export, and responsive light/dark themes. PostgreSQL can be selected with `DATABASE_URL`.
+
+This is an implementation change from the original proposal: the current application does not use Streamlit and is not a no-account application. The original proposal remains useful as the project baseline; the scope and revised schedule below describe the implemented version.
 
 ## Features
 
@@ -19,7 +30,29 @@ An account-based personal finance tracker for recording income and expenses, rev
 
 | Light theme | Dark theme | Phone layout |
 | --- | --- | --- |
-| `docs/screenshots/light.png` (placeholder) | `docs/screenshots/dark.png` (placeholder) | `docs/screenshots/mobile.png` (placeholder) |
+| `docs/screenshots/light.png` (to add) | `docs/screenshots/dark.png` (to add) | `docs/screenshots/mobile.png` (to add) |
+
+## Revised Development Plan
+
+The plan below maps the original 13-week milestones to the expanded implementation. “Complete” means implemented and checked locally; hosted deployment and screenshot capture remain pending.
+
+| Week | Development milestone | Deliverable / status |
+| --- | --- | --- |
+| 1 | Define the project and create the repository | Version 1 proposal and README; complete |
+| 2 | Design the data model and project structure | SQLAlchemy user, transaction, and budget schema with Alembic migration; complete |
+| 3 | Create the web application foundation | FastAPI app serving the modular frontend; complete |
+| 4 | Persist application data | SQLite configuration, PostgreSQL URL support, and migration path; complete |
+| 5 | Implement account registration and login | Password hashing, JWT auth, profile API, and tests; complete |
+| 6 | Build expense and income entry and list | Validated transaction CRUD, month grouping, and search; complete |
+| 7 | Add monthly spending summaries and charts | Statistics and daily chart endpoints/views; complete |
+| 8 | Add budget and settings workflows | Budget, profile, theme, CSV, demo data, and delete-data features; complete |
+| 9 | Add verification and automated checks | 34 API tests, Ruff, and GitHub Actions workflow; complete locally |
+| 10 | Test edge cases and responsive behavior | Validation, account isolation, and 375px browser check; complete locally |
+| 11 | Package for deployment | Dockerfile and Compose configuration; added, Docker image runtime not verified locally |
+| 12 | Capture final presentation screenshots | Light, dark, and phone screenshots in `docs/screenshots/`; pending |
+| 13 | Prepare final demo and submission | 3–5 minute demo, repository link, and hosted URL; pending |
+
+The Version 1 plan proposed Streamlit Community Cloud deployment. Because the implementation changed to FastAPI with a separate vanilla-JavaScript frontend, deployment should use a host that can run the Docker image (or the Python app directly) rather than Streamlit Community Cloud.
 
 ## Tech Stack
 
@@ -116,6 +149,8 @@ The CI workflow runs both checks on every push and pull request.
 
 - Google Fonts require an internet connection; system serif and sans-serif fallbacks are provided.
 - SQLite is intended for local development; use PostgreSQL for multi-instance deployments.
+- Docker Compose configuration is present, but the image has not yet been built in an environment with Docker Desktop running.
+- Final light, dark, and mobile screenshots and a hosted deployment URL have not yet been added.
 
 ## Roadmap
 
