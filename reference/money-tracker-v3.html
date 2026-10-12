@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Money Tracker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap">
+<style>
+:root{--bg:#f3efe6;--sf:#fffdf8;--tx:#1d2420;--mu:#6d716a;--ln:#e4dece;--ac:#1f5c4a;--ac2:#dfeadf;--co:#e8794a;--dg:#b3402f;--on:#f6f1e4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141816;--sf:#1c211e;--tx:#ebe9e0;--mu:#979c93;--ln:#303733;--ac:#2f8a70;--ac2:#243129;--co:#f08a5d;--dg:#e47c69}}
+:root[data-theme="dark"]{--bg:#141816;--sf:#1c211e;--tx:#ebe9e0;--mu:#979c93;--ln:#303733;--ac:#2f8a70;--ac2:#243129;--co:#f08a5d;--dg:#e47c69}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.45 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select{font:inherit;color:inherit}
+.sf{font-family:Fraunces,Georgia,serif}
+.shell{display:flex;min-height:100vh}
+aside{width:224px;flex:none;padding:24px 16px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;border-right:1px solid var(--ln)}
+.logo{display:flex;align-items:center;gap:10px;font:700 18px Fraunces,Georgia,serif;padding:0 8px 26px}
+.logo i{width:30px;height:30px;border-radius:9px 9px 9px 3px;background:var(--ac);color:var(--on);display:grid;place-items:center;font-style:normal;font-size:16px}
+.nv a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:9px;color:var(--mu);cursor:pointer;margin-bottom:3px;transition:.15s}
+.nv a:hover{background:var(--ac2);color:var(--tx)}
+.nv a.on{background:var(--ac);color:var(--on);font-weight:500}
+.me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px 8px;font-size:14px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:none;font-size:14px}
+main{flex:1;min-width:0;padding:30px 36px 70px;max-width:1120px}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.hd small{color:var(--mu);display:block}.hd h2{font:500 30px/1.1 Fraunces,Georgia,serif}
+.mon{display:flex;align-items:center;background:var(--sf);border:1px solid var(--ln);border-radius:999px}
+.mon button{background:none;border:0;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px}.mon button:hover{background:var(--ac2)}
+.mon span{min-width:116px;text-align:center;font-weight:500}
+.top{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-bottom:16px}
+.hero{background:var(--ac);color:var(--on);border-radius:20px;padding:24px 26px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;border:34px solid #ffffff12}
+.hero small{opacity:.75}.big{font:500 44px/1.1 Fraunces,Georgia,serif;margin:4px 0 16px}
+.split{height:7px;border-radius:4px;background:var(--co);overflow:hidden}.split i{display:block;height:100%;background:var(--on);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.hl{display:flex;gap:30px;margin-top:12px;font-size:14px;opacity:.9}.hl b{font-weight:700;margin-left:4px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:20px}
+.card h3{font:500 18px Fraunces,Georgia,serif;margin-bottom:14px}
+.bcard{display:flex;align-items:center;gap:18px}
+.cols{display:grid;grid-template-columns:310px 1fr;gap:16px;align-items:start}
+.seg{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:none;padding:8px;border-radius:8px;cursor:pointer;transition:.15s}
+.seg .on{background:var(--sf);box-shadow:0 1px 3px #0002;font-weight:500}
+label{display:block;font-size:12.5px;color:var(--mu);margin:12px 0 5px}
+input{width:100%;padding:10px 12px;border:1px solid var(--ln);border-radius:10px;background:var(--bg)}
+input:focus{outline:2px solid var(--ac);outline-offset:-1px}
+#chips{display:flex;flex-wrap:wrap;gap:6px;max-height:138px;overflow:auto}
+.chip{border:1px solid var(--ln);background:var(--bg);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:.12s}
+.chip i{width:8px;height:8px;border-radius:50%}.chip:hover{border-color:var(--ac)}
+.chip.on{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.btn{padding:10px 18px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);cursor:pointer;transition:.15s}
+.btn:hover{transform:translateY(-1px)}.btn.p{background:var(--ac);border-color:var(--ac);color:var(--on);font-weight:500}.btn.d{color:var(--dg)}
+.row{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.err{color:var(--dg);font-size:13px;min-height:18px;margin-top:8px}
+.flt{display:flex;gap:8px;margin-bottom:6px}.flt input{flex:1}
+.dh{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mu);padding:14px 4px 6px;text-transform:capitalize}
+.r{display:flex;align-items:center;gap:12px;padding:9px 6px;border-radius:10px;animation:up .4s both}
+.r:hover{background:var(--bg)}.r .n{flex:1;min-width:0}.r small{display:block;color:var(--mu);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.r b{font-variant-numeric:tabular-nums;font-weight:500}.inc{color:var(--ac)}
+.ac{opacity:0;transition:.15s}.r:hover .ac{opacity:1}
+@media(hover:none){.ac{opacity:1}}
+.ac button{background:none;border:0;color:var(--mu);cursor:pointer;font-size:12.5px;padding:3px 5px}.ac button:hover{color:var(--tx);text-decoration:underline}
+.empty{text-align:center;color:var(--mu);padding:34px 10px}.empty svg{display:block;margin:0 auto 10px}
+.pg{display:grid;grid-template-columns:240px 1fr;gap:26px;align-items:center}
+.cat{display:grid;grid-template-columns:140px 1fr 76px 52px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--ln);font-size:14px}
+.cat .b{height:8px;background:var(--bg);border-radius:4px;overflow:hidden}.cat .b i{display:block;height:100%;border-radius:4px;transform-origin:left;animation:gx .8s both}
+.dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px}
+.tabs{display:inline-flex;background:var(--sf);border:1px solid var(--ln);border-radius:999px;padding:3px;margin-bottom:16px}
+.tabs button{border:0;background:none;padding:7px 18px;border-radius:999px;cursor:pointer}.tabs .on{background:var(--ac);color:var(--on)}
+.tip{background:var(--ac2);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.prog{height:12px;background:var(--bg);border-radius:6px;overflow:hidden;margin:14px 0}.prog i{display:block;height:100%;background:var(--ac);border-radius:6px;transform-origin:left;animation:gx .9s both}
+#ts{position:fixed;left:50%;bottom:28px;transform:translate(-50%,30px);background:var(--tx);color:var(--bg);padding:10px 20px;border-radius:999px;opacity:0;transition:.3s;z-index:20;pointer-events:none}
+#ts.s{opacity:1;transform:translate(-50%,0)}
+#bn{display:none}
+@keyframes up{from{opacity:0;transform:translateY(8px)}}
+@keyframes gx{from{transform:scaleX(0)}}
+@keyframes gy{from{transform:scaleY(0)}}
+@keyframes dr{from{stroke-dasharray:0 var(--c)}}
+main>*{animation:up .45s both}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:860px){
+aside{display:none}main{padding:20px 14px 100px}.top,.cols,.pg{grid-template-columns:1fr}
+.hd h2{font-size:25px}.big{font-size:38px}.cat{grid-template-columns:110px 1fr 70px}.cat .pc{display:none}
+#bn{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--sf);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+#bn a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 0;color:var(--mu);font-size:11.5px}#bn a.on{color:var(--ac);font-weight:700}}
+</style>
+</head>
+<body>
+<div class="shell"><aside><div class="logo"><i>₸</i>Money Tracker</div><div class="nv" id="sn"></div><div class="me" id="me"></div></aside><main id="m"></main></div>
+<div id="bn"></div><div id="ts"></div>
+<script>
+const EX=["Shopping","Food","Phone","Entertainment","Education","Beauty","Sports","Social","Transportation","Clothing","Car","Alcohol","Cigarettes","Electronics","Travel","Health","Pets","Repairs","Housing","Home","Gifts","Donations","Lottery","Snacks","Kids","Vegetables","Fruits"];
+const IN=["Salary","Scholarship","Freelance","Gift","Other"];
+const FIX={Food:"#3f9d6b",Health:"#4f7fd9",Transportation:"#c9786b",Shopping:"#d4a72c",Education:"#e0782a",Beauty:"#d9566a"};
+const PAL=["#8466c9","#3a9fae","#a5ae3a","#c9689f","#5c93be","#7ea36a","#b97b4c"];
+const col=c=>FIX[c]||PAL[[...c].reduce((a,x)=>a+x.charCodeAt(0),0)%PAL.length];
+let S={tx:[],budget:0,name:"Bermet"};
+try{const r=localStorage.getItem("mt1");if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem("mt1",JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s);
+const iso=d=>new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const fmt=n=>(Math.round(n*100)/100).toLocaleString("en-US");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const now=new Date(),cm=iso(now).slice(0,7);
+const MN=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const shift=(ym,k)=>iso(new Date(+ym.slice(0,4),+ym.slice(5)-1+k,1)).slice(0,7);
+const lab=ym=>MN[+ym.slice(5)-1]+" "+ym.slice(0,4);
+const inM=(ym,t)=>S.tx.filter(x=>x.date.startsWith(ym)&&(!t||x.type===t));
+const sum=a=>a.reduce((s,x)=>s+x.amt,0);
+const ic=p=>`<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${p}"/></svg>`;
+const PG=[["tx","Транзакции","M4 6h16M4 12h16M4 18h10"],["ch","Статистика","M12 3v9h9A9 9 0 1 1 12 3z"],["bd","Бюджет","M3 7h18v12H3zM3 7l3-3h12l3 3M16 13h2"],["st","Настройки","M5 8h14M5 16h14M9 5v6M15 13v6"]];
+let page="tx",vm=cm,F={type:"expense",cat:"",id:null},q="",ct="expense";
+function go(p){page=p;F.id=null;render()}
+function toast(t){const e=$("#ts");e.textContent=t;e.className="s";clearTimeout(toast.t);toast.t=setTimeout(()=>e.className="",1900)}
+const mon=()=>`<div class="mon"><button onclick="vm=shift(vm,-1);render()" aria-label="Назад">‹</button><span>${lab(vm)}</span><button onclick="vm=shift(vm,1);render()" aria-label="Вперёд">›</button></div>`;
+function cu(){document.querySelectorAll("[data-v]").forEach(el=>{const to=+el.dataset.v,t0=performance.now(),f=t=>{const k=Math.min(1,(t-t0)/650);el.textContent=fmt(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
+function render(){
+$("#sn").innerHTML=PG.map(([k,t,p])=>`<a class="${page===k?"on":""}" onclick="go('${k}')">${ic(p)}${t}</a>`).join("");
+$("#bn").innerHTML=PG.map(([k,t,p])=>`<a class="${page===k?"on":""}" onclick="go('${k}')">${ic(p)}${t}</a>`).join("");
+$("#me").innerHTML=`<div class="av" style="background:#7b4fa0">${esc(S.name[0]||"?")}</div><div>${esc(S.name)}<small style="display:block;color:var(--mu)">локальный профиль</small></div>`;
+$("#m").innerHTML=({tx,ch,bd,st}[page])();
+if(page==="tx"){chips();fill()}cu();scrollTo(0,0)}
+const coins=`<svg width="64" viewBox="0 0 72 64"><ellipse cx="36" cy="48" rx="22" ry="8" fill="var(--ln)"/><ellipse cx="36" cy="38" rx="22" ry="8" fill="var(--ac2)" stroke="var(--ln)"/><ellipse cx="36" cy="28" rx="22" ry="8" fill="var(--ac)"/></svg>`;
+/* Transactions */
+function tx(){const e=S.tx.find(x=>x.id===F.id)||{amt:"",date:iso(now),note:""},h=now.getHours();
+const gr=h<5?"Доброй ночи":h<12?"Доброе утро":h<18?"Добрый день":"Добрый вечер";
+return `<div class="hd"><div><small>${now.toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})}</small><h2>${gr}, ${esc(S.name)}</h2></div>${mon()}</div><div class="top" id="top"></div>
+<div class="cols"><form class="card" id="f" onsubmit="return add(event)"><h3>${F.id?"Редактирование":"Новая запись"}</h3><div class="seg" id="seg"></div>
+<label>Категория</label><div id="chips"></div>
+<label>Сумма</label><input id="am" type="number" step="0.01" min="0" placeholder="0" value="${e.amt}">
+<label>Дата</label><input id="dt" type="date" value="${e.date}"><label>Заметка</label><input id="nt" maxlength="80" placeholder="Например, обед в столовой" value="${esc(e.note)}">
+<div class="err" id="er"></div><div class="row" style="margin-top:6px"><button class="btn p" type="submit">${F.id?"Сохранить":"Добавить"}</button>${F.id?`<button class="btn" type="button" onclick="F.id=null;render()">Отмена</button>`:""}</div></form>
+<div class="card"><div class="flt"><input placeholder="Поиск по заметке или категории" value="${esc(q)}" oninput="q=this.value;fill(1)"></div><div id="tb"></div></div></div>`}
+function chips(){$("#seg").innerHTML=["expense","income"].map(t=>`<button type="button" class="${F.type===t?"on":""}" onclick="F.type='${t}';F.cat='';chips()">${t==="expense"?"Расход":"Доход"}</button>`).join("");
+$("#chips").innerHTML=(F.type==="expense"?EX:IN).map(c=>`<button type="button" class="chip ${c===F.cat?"on":""}" onclick="F.cat='${c}';chips()"><i style="background:${col(c)}"></i>${c}</button>`).join("")}
+function fill(skip){const e=sum(inM(vm,"expense")),i=sum(inM(vm,"income")),b=S.budget,p=b>0?Math.min(1,e/b):0,R=30,C=2*Math.PI*R;
+if(!skip)$("#top").innerHTML=`<div class="hero"><small>Баланс за ${lab(vm).toLowerCase()}</small><div class="big"><span data-v="${i-e}">0</span></div><div class="split"><i style="width:${i+e?i/(i+e)*100:0}%"></i></div><div class="hl"><span>Доходы<b data-v="${i}">0</b></span><span>Расходы<b data-v="${e}">0</b></span></div></div>
+<div class="card bcard"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="${R}" fill="none" stroke="var(--bg)" stroke-width="9"/><circle cx="40" cy="40" r="${R}" fill="none" stroke="${p>=1?"var(--dg)":"var(--ac)"}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${p*C} ${C}" transform="rotate(-90 40 40)" style="--c:${C};animation:dr .9s both"/><text x="40" y="45" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">${b>0?Math.round(e/b*100)+"%":"–"}</text></svg>
+<div><b>Месячный бюджет</b><div style="color:var(--mu);font-size:14px;margin:2px 0 6px">${b>0?(b-e>=0?"Осталось "+fmt(b-e):"Превышение "+fmt(e-b)):"Лимит не задан"}</div><a style="color:var(--ac);cursor:pointer;font-size:14px" onclick="go('bd')">${b>0?"Изменить":"Задать лимит"} →</a></div></div>`;
+const k=q.toLowerCase(),l=inM(vm).filter(x=>!k||x.note.toLowerCase().includes(k)||x.cat.toLowerCase().includes(k)).sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id),g={};
+l.forEach(x=>(g[x.date]=g[x.date]||[]).push(x));
+$("#tb").innerHTML=l.length?Object.keys(g).map(d=>`<div class="dh"><span>${new Date(d+"T00:00").toLocaleDateString("ru-RU",{weekday:"long",day:"numeric",month:"long"})}</span><span>${sum(g[d].filter(x=>x.type==="expense"))?"−"+fmt(sum(g[d].filter(x=>x.type==="expense"))):""}</span></div>`+g[d].map(x=>`<div class="r"><span class="av" style="background:${col(x.cat)};width:36px;height:36px">${x.cat[0]}</span><div class="n">${x.cat}${x.note?`<small>${esc(x.note)}</small>`:""}</div><span class="ac"><button onclick="F={type:'${x.type}',cat:'${x.cat}',id:${x.id}};render()">изменить</button><button onclick="del(${x.id})">удалить</button></span><b class="${x.type==="income"?"inc":""}">${x.type==="income"?"+":"−"}${fmt(x.amt)}</b></div>`).join("")).join(""):`<div class="empty">${coins}${q?"Ничего не найдено":"За этот месяц записей нет.<br>Добавьте первую траты слева."}</div>`;
+if(!skip)cu()}
+function add(ev){ev.preventDefault();const er=$("#er"),a=parseFloat($("#am").value),d=$("#dt").value;
+if(!F.cat)return er.textContent="Выберите категорию.",false;
+if(isNaN(a))return er.textContent="Введите сумму.",false;
+if(a<=0)return er.textContent="Сумма должна быть больше нуля.",false;
+if(a>1e9)return er.textContent="Слишком большая сумма.",false;
+if(!d)return er.textContent="Укажите дату.",false;
+const r={id:F.id||Date.now(),type:F.type,cat:F.cat,amt:a,date:d,note:$("#nt").value.trim()};
+S.tx=F.id?S.tx.map(x=>x.id===F.id?r:x):[...S.tx,r];
+toast(F.id?"Изменения сохранены":"Запись добавлена");save();F.id=null;F.cat="";vm=d.slice(0,7);render();return false}
+function del(id){if(confirm("Удалить запись?")){S.tx=S.tx.filter(x=>x.id!==id);save();toast("Запись удалена");fill()}}
+/* Stats */
+function ch(){const l=inM(vm,ct),tot=sum(l),by={};l.forEach(x=>by[x.cat]=(by[x.cat]||0)+x.amt);
+const arr=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+let h=`<div class="hd"><div><small>Куда уходят деньги</small><h2>Статистика</h2></div>${mon()}</div><div class="tabs"><button class="${ct==="expense"?"on":""}" onclick="ct='expense';render()">Расходы</button><button class="${ct==="income"?"on":""}" onclick="ct='income';render()">Доходы</button></div>`;
+if(!arr.length)return h+`<div class="card empty">${coins}Нет данных за ${lab(vm).toLowerCase()}</div>`;
+h+=`<div class="tip">Больше всего — <b>${arr[0][0]}</b>: ${fmt(arr[0][1])} (${Math.round(arr[0][1]/tot*100)}% от ${ct==="expense"?"расходов":"доходов"}).</div>`;
+const R=70,C=2*Math.PI*R;let o=0;
+const sg=arr.map(([c,v])=>{const n=v/tot*C,s=`<circle cx="100" cy="100" r="${R}" fill="none" stroke="${col(c)}" stroke-width="28" stroke-dasharray="${Math.max(n-1.5,0)} ${C}" stroke-dashoffset="${-o}" transform="rotate(-90 100 100)" style="--c:${C};animation:dr .9s ${o/C*.5}s both"/>`;o+=n;return s}).join("");
+h+=`<div class="card pg"><svg viewBox="0 0 200 200" width="100%" style="max-width:240px" role="img" aria-label="Диаграмма">${sg}<text x="100" y="99" text-anchor="middle" fill="currentColor" font-size="24" font-family="Fraunces,serif" font-weight="500">${fmt(tot)}</text><text x="100" y="120" text-anchor="middle" fill="var(--mu)" font-size="11">всего</text></svg><div>${arr.map(([c,v],i)=>`<div class="cat"><span><span class="dot" style="background:${col(c)}"></span>${c}</span><div class="b"><i style="width:${v/arr[0][1]*100}%;background:${col(c)};animation-delay:${i*.06}s"></i></div><span style="text-align:right">${fmt(v)}</span><span class="pc" style="text-align:right;color:var(--mu)">${(v/tot*100).toFixed(1)}%</span></div>`).join("")}</div></div>`;
+const n=new Date(+vm.slice(0,4),+vm.slice(5),0).getDate(),dv=Array(n).fill(0);l.forEach(x=>dv[+x.date.slice(8)-1]+=x.amt);const mx=Math.max(...dv,1),w=600/n;
+h+=`<div class="card" style="margin-top:16px"><h3>По дням</h3><svg viewBox="0 0 600 130" width="100%" role="img" aria-label="Траты по дням">${dv.map((v,i)=>`<rect x="${i*w+2}" y="${110-v/mx*95}" width="${w-4}" height="${Math.max(v/mx*95,v?2:0)}" rx="2" fill="var(--ac)" style="transform-box:fill-box;transform-origin:bottom;animation:gy .7s ${i*.015}s both"><title>${i+1}: ${fmt(v)}</title></rect>`).join("")}${[1,Math.ceil(n/2),n].map(d=>`<text x="${(d-1)*w+w/2}" y="126" text-anchor="middle" font-size="11" fill="var(--mu)">${d}</text>`).join("")}</svg></div>`;
+return h}
+/* Budget */
+function bd(){const e=sum(inM(cm,"expense")),b=S.budget,p=b>0?Math.min(100,e/b*100):0,r=b-e;
+return `<div class="hd"><div><small>${lab(cm)}</small><h2>Бюджет</h2></div></div><div class="card" style="max-width:560px"><h3>Месячный лимит</h3><div style="display:flex;gap:8px"><input id="bv" type="number" min="0" placeholder="Например, 20000" value="${b||""}"><button class="btn p" onclick="setB()">Сохранить</button></div><div class="err" id="er"></div>
+${b>0?`<div class="prog"><i style="width:${p}%;${p>=100?"background:var(--dg)":""}"></i></div><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><span>Потрачено <b>${fmt(e)}</b> из ${fmt(b)}</span><span style="color:${r<0?"var(--dg)":"inherit"}">${r<0?"Превышение":"Осталось"} <b>${fmt(Math.abs(r))}</b></span></div>`:`<p style="color:var(--mu)">Лимит не задан. Потрачено в этом месяце: ${fmt(e)}.</p>`}</div>`}
+function setB(){const n=parseFloat($("#bv").value);if(isNaN(n)||n<0)return $("#er").textContent="Введите число от 0.",0;S.budget=n;save();toast("Бюджет сохранён");render()}
+/* Settings */
+function st(){const b=(t,f,c="")=>`<button class="btn ${c}" onclick="${f}">${t}</button>`;
+return `<div class="hd"><div><small>Профиль и данные</small><h2>Настройки</h2></div></div><div style="display:grid;gap:14px;max-width:560px"><div class="card"><h3>Профиль</h3><label>Имя</label><input id="nm" value="${esc(S.name)}" maxlength="30"><div class="row">${b("Сохранить","S.name=$('#nm').value.trim()||'User';save();toast('Сохранено');render()","p")}</div></div>
+<div class="card"><h3>Данные</h3><div class="row" style="margin-top:0">${b("Экспорт CSV","csv()")}${b("Демо-данные","demo()")}${b("Удалить всё","wipe()","d")}</div></div>
+<div class="card"><h3>Оформление</h3>${b("Светлая / тёмная тема","let r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark'")}</div></div>`}
+function csv(){if(!S.tx.length)return toast("Нет данных для экспорта");const t="date,type,category,amount,note\n"+S.tx.map(x=>[x.date,x.type,x.cat,x.amt,'"'+x.note.replace(/"/g,'""')+'"'].join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="expenses.csv";a.click()}
+function demo(){[["Food",71],["Transportation",85],["Food",137],["Health",750],["Shopping",490],["Education",427],["Beauty",384],["Food",362],["Transportation",68]].forEach((x,i)=>S.tx.push({id:Date.now()+i,type:"expense",cat:x[0],amt:x[1],date:iso(new Date(now-i*864e5*1.5)),note:i%3?"":"Обед"}));S.tx.push({id:Date.now()+99,type:"income",cat:"Scholarship",amt:3000,date:iso(now),note:"Стипендия"});save();toast("Демо-данные добавлены");go("tx")}
+function wipe(){if(confirm("Удалить все записи и бюджет?")){S.tx=[];S.budget=0;save();render()}}
+render();
+</script>
+</body>
+</html>
